@@ -186,8 +186,10 @@ public class TemplateHelper {
     if (template.startsWith(">")) {
       template = template.substring(1);
     }
-
-    if (template.startsWith("A ") || template.startsWith("C ")) {
+    if (template.equals("AP")) {
+      // MultiAnnotation
+      return getStringAnnotations(checker, template, split, value, column);
+    } else if (template.startsWith("A ") || template.startsWith("C ")) {
       return getStringAnnotations(checker, template, split, value, column);
     } else if (template.startsWith("AT ") || template.startsWith("CT ")) {
       if (template.contains("^^")) {
@@ -717,6 +719,10 @@ public class TemplateHelper {
     if (template.equals("LABEL")) {
       // Handle special LABEL case
       property = dataFactory.getRDFSLabel();
+    } else if (template.equals("AP")) {
+      String name = value.split(" ")[0];
+      value = value.substring(name.length() + 2).replaceAll("^\"|\"$", "");
+      property = getAnnotationProperty(checker, name, column);
     } else {
       String name = template.substring(1).trim();
       property = getAnnotationProperty(checker, name, column);
@@ -929,6 +935,9 @@ public class TemplateHelper {
       return true;
     } else if (template.matches("^(P .*|PI.?|[SEDI]P .*)")) {
       // Properties can be P, PI (does not need to be followed by space), SP, EP, DP, or IP
+      return true;
+    } else if (template.equals("AP")) {
+      // AP multi annotation type
       return true;
     } else
       // Individuals can be I, II (does not need to be followed by space), SI, or DI
