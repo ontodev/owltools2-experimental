@@ -77,6 +77,7 @@ public class MaterializeOperation {
    * @param options A map of options for the operation
    * @param reasonOverImportsClosure if true will first perform materialization over all ontologies
    *     in the import closure
+   * @param includeIndirect if true include redundant existential restrictions
    * @throws OWLOntologyCreationException on ontology problem
    * @throws OntologyLogicException on logic problem
    */
@@ -87,12 +88,37 @@ public class MaterializeOperation {
       Map<String, String> options,
       boolean reasonOverImportsClosure)
       throws OntologyLogicException, OWLOntologyCreationException {
+    materialize(ontology, reasonerFactory, properties, options, reasonOverImportsClosure, false);
+  }
+
+  /**
+   * Replace EquivalentClass axioms with weaker SubClassOf axioms.
+   *
+   * @param ontology The OWLOntology to relax
+   * @param reasonerFactory reasoner factory for the reasoner that is to be wrapped
+   * @param properties object properties whose existentials are to be materialized (null
+   *     materializes all)
+   * @param options A map of options for the operation
+   * @param reasonOverImportsClosure if true will first perform materialization over all ontologies
+   *     in the import closure
+   * @throws OWLOntologyCreationException on ontology problem
+   * @throws OntologyLogicException on logic problem
+   */
+  public static void materialize(
+      OWLOntology ontology,
+      OWLReasonerFactory reasonerFactory,
+      Set<OWLObjectProperty> properties,
+      Map<String, String> options,
+      boolean reasonOverImportsClosure,
+      boolean includeIndirect)
+      throws OntologyLogicException, OWLOntologyCreationException {
 
     if (reasonOverImportsClosure) {
       logger.info("Materializing imported ontologies...");
       for (OWLOntology importedOntology : ontology.getImportsClosure()) {
         if (!importedOntology.equals(ontology)) {
-          materialize(importedOntology, reasonerFactory, properties, options, false);
+          materialize(
+              importedOntology, reasonerFactory, properties, options, false, includeIndirect);
         }
       }
     }
@@ -143,7 +169,7 @@ public class MaterializeOperation {
         logger.debug("Excluding classes not in main ontology: " + c);
         continue;
       }
-      Set<OWLClassExpression> sces = emr.getSuperClassExpressions(c, true);
+      Set<OWLClassExpression> sces = emr.getSuperClassExpressions(c, !includeIndirect);
       if (!emr.isSatisfiable(c)) {
         logger.error("Ontology is not coherent! Unsatisfiable: " + c);
         throw new IncoherentTBoxException(Collections.singleton(c));

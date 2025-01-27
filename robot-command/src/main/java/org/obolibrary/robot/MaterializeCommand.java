@@ -44,6 +44,8 @@ public class MaterializeCommand implements Command {
     o.addOption("o", "output", true, "save reasoned ontology to a file");
     o.addOption("t", "term", true, "a property to materialize");
     o.addOption("T", "term-file", true, "load properties from a file");
+    o.addOption(
+        "c", "include-indirect", true, "if true include redundant existential restrictions");
     options = o;
   }
 
@@ -130,6 +132,8 @@ public class MaterializeCommand implements Command {
         reasonerOptions.put(option, line.getOptionValue(option));
       }
     }
+
+    boolean includeIndirect = CommandLineHelper.getBooleanValue(line, "include-indirect", false);
 
     Set<IRI> terms = CommandLineHelper.getTerms(ioHelper, line, true);
     Set<OWLObjectProperty> properties = new HashSet<>();
