@@ -1,0 +1,285 @@
+Prefix(:=<http://purl.obolibrary.org/obo/cl.owl#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://purl.obolibrary.org/obo/cl.owl>
+
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000000>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000113>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000235>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000583>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000738>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000842>))
+Declaration(Class(<http://purl.obolibrary.org/obo/CL_0000988>))
+Declaration(Class(<http://purl.obolibrary.org/obo/GO_0005634>))
+Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0001407>))
+Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0010006>))
+Declaration(Class(<http://purl.obolibrary.org/obo/UBERON_0000061>))
+Declaration(Class(<http://purl.obolibrary.org/obo/UBERON_0000465>))
+Declaration(Class(<http://purl.obolibrary.org/obo/UBERON_0001062>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000051>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/RO_0000053>))
+Declaration(AnnotationProperty(<http://purl.obolibrary.org/obo/IAO_0000115>))
+Declaration(AnnotationProperty(<http://purl.obolibrary.org/obo/IAO_0000233>))
+Declaration(AnnotationProperty(<http://purl.obolibrary.org/obo/OMO_0002000>))
+Declaration(AnnotationProperty(<http://purl.obolibrary.org/obo/RO_0002175>))
+Declaration(AnnotationProperty(<http://purl.org/dc/terms/contributor>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#creation_date>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#hasDbXref>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#id>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#inSubset>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#shorthand>))
+Declaration(AnnotationProperty(<http://www.geneontology.org/formats/oboInOwl#source>))
+Declaration(AnnotationProperty(<https://w3id.org/sssom/mapping_justification>))
+############################
+#   Annotation Properties
+############################
+
+# Annotation Property: <http://purl.obolibrary.org/obo/IAO_0000115> (definition)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/IAO_0000115> "The official definition, explaining the meaning of a class or property. Shall be Aristotelian, formalized and normalized. Can be augmented with colloquial definitions.")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/IAO_0000115> "definition")
+
+# Annotation Property: <http://purl.obolibrary.org/obo/RO_0002175> (present in taxon)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/RO_0002175> "S present_in_taxon T if some instance of T has some S. This does not means that all instances of T have an S - it may only be certain life stages or sexes that have S")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/OMO_0002000> <http://purl.obolibrary.org/obo/RO_0002175> "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX in_taxon: <http://purl.obolibrary.org/obo/RO_0002162>
+PREFIX present_in_taxon: <http://purl.obolibrary.org/obo/RO_0002175>
+CONSTRUCT {
+  in_taxon: a owl:ObjectProperty .
+  ?witness rdfs:label ?label .
+  ?witness rdfs:subClassOf ?x .
+  ?witness rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty in_taxon: ;
+    owl:someValuesFrom ?taxon
+  ] .
+}
+WHERE {
+  ?x present_in_taxon: ?taxon .
+  BIND(IRI(CONCAT(
+    \"http://purl.obolibrary.org/obo/RO_0002175#\",
+    MD5(STR(?x)),
+    \"-\",
+    MD5(STR(?taxon))
+  )) as ?witness)
+  BIND(CONCAT(STR(?x), \" in taxon \", STR(?taxon)) AS ?label)
+}")
+AnnotationAssertion(rdfs:comment <http://purl.obolibrary.org/obo/RO_0002175> "The SPARQL expansion for this relation introduces new named classes into the ontology. For this reason it is likely that the expansion should only be performed during a QC pipeline; the expanded output should usually not be included in a published version of the ontology.")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/RO_0002175> "present in taxon")
+AnnotationAssertion(rdfs:seeAlso <http://purl.obolibrary.org/obo/RO_0002175> <https://github.com/obophenotype/uberon/wiki/Taxon-constraints>)
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#hasDbXref> (has cross-reference)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://www.geneontology.org/formats/oboInOwl#hasDbXref> "An annotation property that links an ontology entity or a statement to a prefixed identifier or URI.")
+AnnotationAssertion(<http://purl.org/dc/terms/contributor> <http://www.geneontology.org/formats/oboInOwl#hasDbXref> <https://orcid.org/0000-0002-7356-1779>)
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasDbXref> "database_cross_reference")
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasDbXref> "has cross-reference")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> (has exact synonym)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> "An alternative label for a class or property which has the exact same meaning than the preferred name/primary label.")
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> "has exact synonym")
+AnnotationAssertion(rdfs:seeAlso <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> "https://github.com/information-artifact-ontology/ontology-metadata/issues/20")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> (has narrow synonym)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> "An alternative label for a class or property which has a more specific meaning than the preferred name/primary label.")
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> "has narrow synonym")
+AnnotationAssertion(rdfs:seeAlso <http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> "https://github.com/information-artifact-ontology/ontology-metadata/issues/19")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> (has_obo_namespace)
+
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> "has_obo_namespace")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> (has related synonym)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> "An alternative label for a class or property that has been used synonymously with the primary term name, but the usage is not strictly correct.")
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> "has related synonym")
+AnnotationAssertion(rdfs:seeAlso <http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> "https://github.com/information-artifact-ontology/ontology-metadata/issues/21")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#inSubset> (in_subset)
+
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#inSubset> "in_subset")
+
+# Annotation Property: <http://www.geneontology.org/formats/oboInOwl#shorthand> (shorthand)
+
+AnnotationAssertion(rdfs:label <http://www.geneontology.org/formats/oboInOwl#shorthand> "shorthand")
+
+
+############################
+#   Object Properties
+############################
+
+# Object Property: <http://purl.obolibrary.org/obo/BFO_0000051> (has part)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/BFO_0000051> "a core relation that holds between a whole and its part")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> <http://purl.obolibrary.org/obo/BFO_0000051> "BFO:0000051")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/BFO_0000051> "external")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/BFO_0000051> "has_part")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/valid_for_go_annotation_extension>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/valid_for_go_ontology>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/valid_for_gocam>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#shorthand> <http://purl.obolibrary.org/obo/BFO_0000051> "has_part")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/BFO_0000051> "has part")
+TransitiveObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000051>)
+
+# Object Property: <http://purl.obolibrary.org/obo/RO_0000053> (has characteristic)
+
+AnnotationAssertion(<http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/RO_0000053> "Inverse of characteristic_of")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> <http://purl.obolibrary.org/obo/RO_0000053> "RO:0000053")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/RO_0000053> "external")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/RO_0000053> "bearer_of")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#shorthand> <http://purl.obolibrary.org/obo/RO_0000053> "bearer_of")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/RO_0000053> "has characteristic")
+InverseFunctionalObjectProperty(<http://purl.obolibrary.org/obo/RO_0000053>)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000000> (cell)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "CARO:mah") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000000> "A material entity of anatomical origin (part of or deriving from an organism) that has as its parts a maximally connected cell compartment surrounded by a plasma membrane.")
+AnnotationAssertion(rdfs:comment <http://purl.obolibrary.org/obo/CL_0000000> "The definition of cell is intended to represent all cells, and thus a cell is defined as a material entity and not an anatomical structure, which implies that it is part of an organism (or the entirety of one).")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000000> "cell")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000000> <http://purl.obolibrary.org/obo/UBERON_0000061>)
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000113> (mononuclear phagocyte)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:add") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:tfm") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "ISBN:0781735149") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000113> "A vertebrate phagocyte with a single nucleus.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/CL_0000113> <http://purl.obolibrary.org/obo/NCBITaxon_9606>)
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000113> "mononuclear phagocyte")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000113> <http://purl.obolibrary.org/obo/CL_0000842>)
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000235> (macrophage)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:add") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:tfm") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GO_REF:0000031") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "PMID:16213494") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "PMID:1919437") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000235> "A mononuclear phagocyte present in variety of tissues, typically differentiated from monocytes, capable of phagocytosing a variety of extracellular particulate material, including immune complexes, microorganisms, and dead cells.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/CL_0000235> <http://purl.obolibrary.org/obo/NCBITaxon_9606>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000235> "histiocyte")
+AnnotationAssertion(rdfs:comment <http://purl.obolibrary.org/obo/CL_0000235> "Morphology: Diameter 30_M-80 _M, abundant cytoplasm, low N/C ratio, eccentric nucleus. Irregular shape with pseudopods, highly adhesive. Contain vacuoles and phagosomes, may contain azurophilic granules; markers: Mouse & Human: CD68, in most cases CD11b. Mouse: in most cases F4/80+; role or process: immune, antigen presentation, & tissue remodelling; lineage: hematopoietic, myeloid.")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000235> "macrophage")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000235> <http://purl.obolibrary.org/obo/CL_0000113>)
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000583> (alveolar macrophage)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:ana") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:dsd") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:tfm") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GO_REF:0000031") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "MESH:D016676") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000583> "A tissue-resident macrophage found in the alveoli of the lungs. Ingests small inhaled particles resulting in degradation and presentation of the antigen to immunocompetent cells. Markers include F4/80-positive, CD11b-/low, CD11c-positive, CD68-positive, sialoadhesin-positive, dectin-1-positive, MR-positive, CX3CR1-negative.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/CL_0000583> <http://purl.obolibrary.org/obo/NCBITaxon_9606>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> <http://purl.obolibrary.org/obo/CL_0000583> "FMA:83023")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000583> "dust cell")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> <http://purl.obolibrary.org/obo/CL_0000583> "MF.Lu")
+AnnotationAssertion(rdfs:comment <http://purl.obolibrary.org/obo/CL_0000583> "Markers: Mouse: F4/80mid, CD11b-/low, CD11c+, CD68+, sialoadhesin+, dectin-1+, MR+, CX3CR1-.")
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "https://doi.org/10.5281/zenodo.11165918") rdfs:comment <http://purl.obolibrary.org/obo/CL_0000583> "The marker set MSR1, FABP4 can identify the Human cell type alveolar macrophage in the Lung with a confidence of 0.80 (NS-Forest FBeta value).")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000583> "alveolar macrophage")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000583> <http://purl.obolibrary.org/obo/CL_0000235>)
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000738> (leukocyte)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:add") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:tfm") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "ISBN:978-0-323-05290-0") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000738> "An achromatic cell of the myeloid or lymphoid lineages capable of ameboid movement, found in blood or other tissue.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/CL_0000738> <http://purl.obolibrary.org/obo/NCBITaxon_9606>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000738> "leucocyte")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000738> "white blood cell")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym> <http://purl.obolibrary.org/obo/CL_0000738> "immune cell")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000738> "leukocyte")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000738> <http://purl.obolibrary.org/obo/CL_0000988>)
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000842> (mononuclear cell)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:add") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000842> "A leukocyte with a single non-segmented nucleus in the mature form.")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000842> "mononuclear leukocyte")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> <http://purl.obolibrary.org/obo/CL_0000842> "peripheral blood mononuclear cell")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000842> "mononuclear cell")
+EquivalentClasses(<http://purl.obolibrary.org/obo/CL_0000842> ObjectIntersectionOf(<http://purl.obolibrary.org/obo/CL_0000738> ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/RO_0000053> <http://purl.obolibrary.org/obo/PATO_0001407>)))
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000842> <http://purl.obolibrary.org/obo/CL_0000738>)
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000842> ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/GO_0005634>))
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000842> ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/RO_0000053> <http://purl.obolibrary.org/obo/PATO_0001407>))
+
+# Class: <http://purl.obolibrary.org/obo/CL_0000988> (hematopoietic cell)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:add") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GO_REF:0000031") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/CL_0000988> "A cell of a hematopoietic lineage.")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000988> "haematopoietic cell")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/CL_0000988> "hemopoietic cell")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/CL_0000988> "hematopoietic cell")
+SubClassOf(<http://purl.obolibrary.org/obo/CL_0000988> <http://purl.obolibrary.org/obo/CL_0000000>)
+
+# Class: <http://purl.obolibrary.org/obo/GO_0005634> (nucleus)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:go_curators") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/GO_0005634> "A membrane-bounded organelle of eukaryotic cells in which chromosomes are housed and replicated. In most cells, the nucleus contains all of the cell's chromosomes except the organellar chromosomes, and is the site of RNA synthesis and processing. In some species, or in specialized cell types, RNA metabolism or DNA replication may be absent.")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/GO_0005634> "cell nucleus")
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:al") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:mah") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "GOC:vw") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "PMID:15030757") <http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym> <http://purl.obolibrary.org/obo/GO_0005634> "horsetail nucleus")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/GO_0005634> "cellular_component")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/GO_0005634> "GO:0005634")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/GO_0005634> "nucleus")
+SubClassOf(<http://purl.obolibrary.org/obo/GO_0005634> <http://purl.obolibrary.org/obo/UBERON_0000061>)
+SubClassOf(<http://purl.obolibrary.org/obo/GO_0005634> ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/UBERON_0000061>))
+
+# Class: <http://purl.obolibrary.org/obo/PATO_0001407> (mononucleate)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "Biology-online:Biology-online") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/PATO_0001407> "A nucleate quality inhering in a bearer by virtue of the bearer's having one nucleus.")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/PATO_0001407> "quality")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/PATO_0001407> "PATO:0001407")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/PATO_0001407> <http://purl.obolibrary.org/obo/pato#cell_quality>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/PATO_0001407> <http://purl.obolibrary.org/obo/pato#mpath_slim>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#inSubset> <http://purl.obolibrary.org/obo/PATO_0001407> <http://purl.obolibrary.org/obo/pato#value_slim>)
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/PATO_0001407> "mononucleate")
+
+# Class: <http://purl.obolibrary.org/obo/PATO_0010006> (cell morphology)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "https://orcid.org/0000-0002-7073-9172") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/PATO_0010006> "A quality of a single cell inhering in the bearer by virtue of the bearer's size or shape or structure.")
+AnnotationAssertion(<http://purl.org/dc/terms/contributor> <http://purl.obolibrary.org/obo/PATO_0010006> <https://orcid.org/0000-0002-7073-9172>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#creation_date> <http://purl.obolibrary.org/obo/PATO_0010006> "2021-01-23T11:31:53Z")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/PATO_0010006> "quality")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/PATO_0010006> "PATO:0010006")
+AnnotationAssertion(rdfs:comment <http://purl.obolibrary.org/obo/PATO_0010006> "Use this term for morphologies that can *only* inhere in a cell, e.g. morphological qualities inhering in a cell by virtue of the presence, location or shape of one or more cell parts.")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/PATO_0010006> "cell morphology")
+
+# Class: <http://purl.obolibrary.org/obo/UBERON_0000061> (anatomical structure)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "CARO:0000003") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/UBERON_0000061> "Material anatomical entity that is a single connected structure with inherent 3D shape generated by coordinated expression of the organism's own genome.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000061> <http://purl.obolibrary.org/obo/NCBITaxon_33090>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000061> <http://purl.obolibrary.org/obo/NCBITaxon_33208>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000061> <http://purl.obolibrary.org/obo/NCBITaxon_4751>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/UBERON_0000061> "biological structure")
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "CARO:0000003") <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> <http://purl.obolibrary.org/obo/UBERON_0000061> "connected biological structure")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/UBERON_0000061> "uberon")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/UBERON_0000061> "UBERON:0000061")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UBERON_0000061> "anatomical structure")
+SubClassOf(<http://purl.obolibrary.org/obo/UBERON_0000061> <http://purl.obolibrary.org/obo/UBERON_0000465>)
+
+# Class: <http://purl.obolibrary.org/obo/UBERON_0000465> (material anatomical entity)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "http://orcid.org/0000-0001-9114-8737") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/UBERON_0000465> "Anatomical entity that has mass.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000465> <http://purl.obolibrary.org/obo/NCBITaxon_33090>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000465> <http://purl.obolibrary.org/obo/NCBITaxon_33208>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0000465> <http://purl.obolibrary.org/obo/NCBITaxon_4751>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/UBERON_0000465> "uberon")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/UBERON_0000465> "UBERON:0000465")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UBERON_0000465> "material anatomical entity")
+SubClassOf(<http://purl.obolibrary.org/obo/UBERON_0000465> <http://purl.obolibrary.org/obo/UBERON_0001062>)
+
+# Class: <http://purl.obolibrary.org/obo/UBERON_0001062> (anatomical entity)
+
+AnnotationAssertion(Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "FMA:62955") Annotation(<http://www.geneontology.org/formats/oboInOwl#hasDbXref> "http://orcid.org/0000-0001-9114-8737") <http://purl.obolibrary.org/obo/IAO_0000115> <http://purl.obolibrary.org/obo/UBERON_0001062> "Biological entity that is either an individual member of a biological species or constitutes the structural organization of an individual member of a biological species.")
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0001062> <http://purl.obolibrary.org/obo/NCBITaxon_33090>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0001062> <http://purl.obolibrary.org/obo/NCBITaxon_33208>)
+AnnotationAssertion(<http://purl.obolibrary.org/obo/RO_0002175> <http://purl.obolibrary.org/obo/UBERON_0001062> <http://purl.obolibrary.org/obo/NCBITaxon_4751>)
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#hasOBONamespace> <http://purl.obolibrary.org/obo/UBERON_0001062> "uberon")
+AnnotationAssertion(<http://www.geneontology.org/formats/oboInOwl#id> <http://purl.obolibrary.org/obo/UBERON_0001062> "UBERON:0001062")
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UBERON_0001062> "anatomical entity")
+
+
+SubClassOf(ObjectIntersectionOf(<http://purl.obolibrary.org/obo/CL_0000000> ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/RO_0000053> <http://purl.obolibrary.org/obo/PATO_0001407>)) ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/GO_0005634>))
+SubClassOf(ObjectSomeValuesFrom(<http://purl.obolibrary.org/obo/RO_0000053> <http://purl.obolibrary.org/obo/PATO_0010006>) <http://purl.obolibrary.org/obo/CL_0000000>)
+)

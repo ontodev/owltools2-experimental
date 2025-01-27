@@ -1,0 +1,145 @@
+format-version: 1.2
+ontology: cl
+
+[Term]
+id: CL:0000000
+name: cell
+def: "A material entity of anatomical origin (part of or deriving from an organism) that has as its parts a maximally connected cell compartment surrounded by a plasma membrane." [CARO:mah]
+comment: The definition of cell is intended to represent all cells, and thus a cell is defined as a material entity and not an anatomical structure, which implies that it is part of an organism (or the entirety of one).
+is_a: UBERON:0000061 ! anatomical structure
+
+[Term]
+id: CL:0000113
+name: mononuclear phagocyte
+def: "A vertebrate phagocyte with a single nucleus." [GOC:add, GOC:tfm, ISBN:0781735149]
+is_a: CL:0000842 ! mononuclear cell
+property_value: RO:0002175 NCBITaxon:9606
+
+[Term]
+id: CL:0000235
+name: macrophage
+def: "A mononuclear phagocyte present in variety of tissues, typically differentiated from monocytes, capable of phagocytosing a variety of extracellular particulate material, including immune complexes, microorganisms, and dead cells." [GO_REF:0000031, GOC:add, GOC:tfm, PMID:16213494, PMID:1919437]
+comment: Morphology: Diameter 30_M-80 _M, abundant cytoplasm, low N/C ratio, eccentric nucleus. Irregular shape with pseudopods, highly adhesive. Contain vacuoles and phagosomes, may contain azurophilic granules; markers: Mouse & Human: CD68, in most cases CD11b. Mouse: in most cases F4/80+; role or process: immune, antigen presentation, & tissue remodelling; lineage: hematopoietic, myeloid.
+synonym: "histiocyte" EXACT []
+is_a: CL:0000113 ! mononuclear phagocyte
+property_value: RO:0002175 NCBITaxon:9606
+
+[Term]
+id: CL:0000583
+name: alveolar macrophage
+def: "A tissue-resident macrophage found in the alveoli of the lungs. Ingests small inhaled particles resulting in degradation and presentation of the antigen to immunocompetent cells. Markers include F4/80-positive, CD11b-/low, CD11c-positive, CD68-positive, sialoadhesin-positive, dectin-1-positive, MR-positive, CX3CR1-negative." [GO_REF:0000031, GOC:ana, GOC:dsd, GOC:tfm, MESH:D016676]
+comment: Markers: Mouse: F4/80mid, CD11b-/low, CD11c+, CD68+, sialoadhesin+, dectin-1+, MR+, CX3CR1-.
+synonym: "dust cell" EXACT []
+synonym: "MF.Lu" RELATED []
+xref: FMA:83023
+is_a: CL:0000235 ! macrophage
+property_value: RO:0002175 NCBITaxon:9606
+
+[Term]
+id: CL:0000738
+name: leukocyte
+def: "An achromatic cell of the myeloid or lymphoid lineages capable of ameboid movement, found in blood or other tissue." [GOC:add, GOC:tfm, ISBN:978-0-323-05290-0]
+synonym: "immune cell" RELATED []
+synonym: "leucocyte" EXACT []
+synonym: "white blood cell" EXACT []
+is_a: CL:0000988 ! hematopoietic cell
+property_value: RO:0002175 NCBITaxon:9606
+
+[Term]
+id: CL:0000842
+name: mononuclear cell
+def: "A leukocyte with a single non-segmented nucleus in the mature form." [GOC:add]
+synonym: "mononuclear leukocyte" EXACT []
+synonym: "peripheral blood mononuclear cell" NARROW []
+is_a: CL:0000738 ! leukocyte
+intersection_of: CL:0000738 ! leukocyte
+intersection_of: bearer_of PATO:0001407 ! mononucleate
+relationship: bearer_of PATO:0001407 ! mononucleate
+relationship: has_part GO:0005634 ! nucleus
+
+[Term]
+id: CL:0000988
+name: hematopoietic cell
+def: "A cell of a hematopoietic lineage." [GO_REF:0000031, GOC:add]
+synonym: "haematopoietic cell" EXACT []
+synonym: "hemopoietic cell" EXACT []
+is_a: CL:0000000 ! cell
+
+[Term]
+id: GO:0005634
+name: nucleus
+namespace: cellular_component
+def: "A membrane-bounded organelle of eukaryotic cells in which chromosomes are housed and replicated. In most cells, the nucleus contains all of the cell's chromosomes except the organellar chromosomes, and is the site of RNA synthesis and processing. In some species, or in specialized cell types, RNA metabolism or DNA replication may be absent." [GOC:go_curators]
+synonym: "cell nucleus" EXACT []
+synonym: "horsetail nucleus" NARROW [GOC:al, GOC:mah, GOC:vw, PMID:15030757]
+is_a: UBERON:0000061 ! anatomical structure
+relationship: has_part UBERON:0000061 ! anatomical structure
+
+[Term]
+id: PATO:0001407
+name: mononucleate
+namespace: quality
+def: "A nucleate quality inhering in a bearer by virtue of the bearer's having one nucleus." [Biology-online:Biology-online]
+subset: cell_quality
+subset: mpath_slim
+subset: value_slim
+
+[Term]
+id: PATO:0010006
+name: cell morphology
+namespace: quality
+def: "A quality of a single cell inhering in the bearer by virtue of the bearer's size or shape or structure." [https://orcid.org/0000-0002-7073-9172]
+comment: Use this term for morphologies that can *only* inhere in a cell, e.g. morphological qualities inhering in a cell by virtue of the presence, location or shape of one or more cell parts.
+property_value: http://purl.org/dc/terms/contributor https://orcid.org/0000-0002-7073-9172
+creation_date: 2021-01-23T11:31:53Z
+
+[Term]
+id: UBERON:0000061
+name: anatomical structure
+namespace: uberon
+def: "Material anatomical entity that is a single connected structure with inherent 3D shape generated by coordinated expression of the organism's own genome." [CARO:0000003]
+synonym: "biological structure" EXACT []
+synonym: "connected biological structure" EXACT [CARO:0000003]
+is_a: UBERON:0000465 ! material anatomical entity
+property_value: RO:0002175 NCBITaxon:33090
+property_value: RO:0002175 NCBITaxon:33208
+property_value: RO:0002175 NCBITaxon:4751
+
+[Term]
+id: UBERON:0000465
+name: material anatomical entity
+namespace: uberon
+def: "Anatomical entity that has mass." [http://orcid.org/0000-0001-9114-8737]
+is_a: UBERON:0001062 ! anatomical entity
+property_value: RO:0002175 NCBITaxon:33090
+property_value: RO:0002175 NCBITaxon:33208
+property_value: RO:0002175 NCBITaxon:4751
+
+[Term]
+id: UBERON:0001062
+name: anatomical entity
+namespace: uberon
+def: "Biological entity that is either an individual member of a biological species or constitutes the structural organization of an individual member of a biological species." [FMA:62955, http://orcid.org/0000-0001-9114-8737]
+property_value: RO:0002175 NCBITaxon:33090
+property_value: RO:0002175 NCBITaxon:33208
+property_value: RO:0002175 NCBITaxon:4751
+
+[Typedef]
+id: bearer_of
+name: has characteristic
+namespace: external
+def: "Inverse of characteristic_of" []
+xref: RO:0000053
+is_inverse_functional: true
+
+[Typedef]
+id: has_part
+name: has part
+namespace: external
+def: "a core relation that holds between a whole and its part" []
+subset: http://purl.obolibrary.org/obo/valid_for_go_annotation_extension
+subset: http://purl.obolibrary.org/obo/valid_for_go_ontology
+subset: http://purl.obolibrary.org/obo/valid_for_gocam
+xref: BFO:0000051
+is_transitive: true
+

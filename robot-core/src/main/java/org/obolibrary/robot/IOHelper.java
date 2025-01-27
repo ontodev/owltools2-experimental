@@ -34,6 +34,7 @@ import org.geneontology.obographs.core.model.GraphDocument;
 import org.geneontology.obographs.owlapi.FromOwl;
 import org.geneontology.obographs.owlapi.OboGraphJsonDocumentFormat;
 import org.obolibrary.obo2owl.OWLAPIOwl2Obo;
+import org.obolibrary.obo2owl.Obo2OWLConstants;
 import org.obolibrary.oboformat.model.FrameStructureException;
 import org.obolibrary.oboformat.model.OBODoc;
 import org.obolibrary.oboformat.writer.OBOFormatWriter;
@@ -45,6 +46,7 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.rdf.rdfxml.renderer.IllegalElementNameException;
 import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriterPreferences;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -850,12 +852,37 @@ public class IOHelper {
       Map<String, String> addPrefixes,
       boolean checkOBO)
       throws IOException {
+    return saveOntology(
+        ontology, format, ontologyIRI, addPrefixes, checkOBO, EnumSet.noneOf(OBOWriteOption.class));
+  }
+
+  /**
+   * Save an ontology in the given format to an IRI, with option to add prefixes and options to
+   * ignore OBO document checks and produce a "clean" OBO output.
+   *
+   * @param ontology the ontology to save
+   * @param format the ontology format to use
+   * @param ontologyIRI the IRI to save the ontology to
+   * @param addPrefixes map of prefixes to add to header
+   * @param checkOBO if false, ignore OBO document checks
+   * @param cleanOBO optional parameters for OBO output
+   * @return the saved ontology
+   * @throws IOException on any problem
+   */
+  public OWLOntology saveOntology(
+      final OWLOntology ontology,
+      OWLDocumentFormat format,
+      IRI ontologyIRI,
+      Map<String, String> addPrefixes,
+      boolean checkOBO,
+      EnumSet<OBOWriteOption> cleanOBO)
+      throws IOException {
     // Determine the format if not provided
     logger.debug("Saving ontology as {} with to IRI {}", format, ontologyIRI);
     XMLWriterPreferences.getInstance().setUseNamespaceEntities(getXMLEntityFlag());
     // If saving in compressed format, get byte data then save to gzip
     if (ontologyIRI.toString().endsWith(".gz")) {
-      byte[] data = getOntologyFileData(ontology, format, checkOBO);
+      byte[] data = getOntologyFileData(ontology, format, checkOBO, cleanOBO);
       saveCompressedOntology(data, ontologyIRI);
       return ontology;
     }
@@ -873,7 +900,7 @@ public class IOHelper {
     if (addPrefixes != null && !addPrefixes.isEmpty()) {
       addPrefixes(format, addPrefixes);
     }
-    saveOntologyFile(ontology, format, ontologyIRI, checkOBO);
+    saveOntologyFile(ontology, format, ontologyIRI, checkOBO, cleanOBO);
     return ontology;
   }
 
@@ -1613,17 +1640,22 @@ public class IOHelper {
   }
 
   /**
-   * Given an ontology, a document format, and a boolean indicating to check OBO formatting, return
-   * the ontology file in the OWLDocumentFormat as a byte array.
+   * Given an ontology, a document format, a boolean indicating to check OBO formatting, and a set
+   * of options for OBO output, return the ontology file in the OWLDocumentFormat as a byte array.
    *
    * @param ontology OWLOntology to save
    * @param format OWLDocumentFormat to save in
-   * @param checkOBO boolean indiciating to check OBO formatting
+   * @param checkOBO boolean indicating to check OBO formatting
+   * @param cleanOBO optional parameters for OBO output
    * @return byte array of formatted ontology data
    * @throws IOException on any problem
    */
   private byte[] getOntologyFileData(
-      final OWLOntology ontology, OWLDocumentFormat format, boolean checkOBO) throws IOException {
+      final OWLOntology ontology,
+      OWLDocumentFormat format,
+      boolean checkOBO,
+      EnumSet<OBOWriteOption> cleanOBO)
+      throws IOException {
     byte[] data;
     // first handle any non-official output formats.
     // currently this is just OboGraphs JSON format
@@ -1632,9 +1664,8 @@ public class IOHelper {
       GraphDocument gd = fromOwl.generateGraphDocument(ontology);
       String doc = OgJsonGenerator.render(gd);
       data = doc.getBytes();
-    } else if (format instanceof OBODocumentFormat && !checkOBO) {
-      OWLAPIOwl2Obo bridge = new OWLAPIOwl2Obo(ontology.getOWLOntologyManager());
-      OBODoc oboOntology = bridge.convert(ontology);
+    } else if (format instanceof OBODocumentFormat && (!checkOBO || !cleanOBO.isEmpty())) {
+      OBODoc oboOntology = makeCleanOBODocument(ontology, cleanOBO);
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(baos))) {
         OBOFormatWriter oboWriter = new OBOFormatWriter();
@@ -1727,17 +1758,23 @@ public class IOHelper {
   }
 
   /**
-   * Given an ontology, a format, an IRI to save to, and a boolean indiciating to check OBO
-   * formatting, save the ontology in the given format to a file at the IRI.
+   * Given an ontology, a format, an IRI to save to, a boolean indicating to check OBO formatting
+   * and a set of options for OBO output, save the ontology in the given format to a file at the
+   * IRI.
    *
    * @param ontology OWLOntology to save
    * @param format OWLDocumentFormat to save in
    * @param ontologyIRI IRI to save to
    * @param checkOBO boolean indicating to check OBO formatting
+   * @param cleanOBO optional parameters for OBO output
    * @throws IOException on any problem
    */
   private void saveOntologyFile(
-      final OWLOntology ontology, OWLDocumentFormat format, IRI ontologyIRI, boolean checkOBO)
+      final OWLOntology ontology,
+      OWLDocumentFormat format,
+      IRI ontologyIRI,
+      boolean checkOBO,
+      EnumSet<OBOWriteOption> cleanOBO)
       throws IOException {
     // first handle any non-official output formats.
     // currently this is just OboGraphs JSON format
@@ -1756,6 +1793,13 @@ public class IOHelper {
       mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
       ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
       writer.writeValue(new FileOutputStream(outfile), gd);
+    } else if (format instanceof OBODocumentFormat && !cleanOBO.isEmpty()) {
+      // OBO format can be handled natively by the OWLAPI ontology manager, but in "clean" mode we
+      // need to call the OBO converter ourselves
+      OBODoc oboDoc = makeCleanOBODocument(ontology, cleanOBO);
+      OBOFormatWriter oboWriter = new OBOFormatWriter();
+      oboWriter.setCheckStructure(checkOBO);
+      oboWriter.write(oboDoc, new File(ontologyIRI.toURI()));
     } else {
       // use native save functionality
       try {
@@ -1811,5 +1855,53 @@ public class IOHelper {
         f.delete();
       }
     }
+  }
+
+  /**
+   * Convert an ontology to an OBO document, tweaking the ontology as needed to produce a "clean"
+   * output.
+   *
+   * <p>Note that apart from the removal of "untranslatable axioms", which only affects the OBO
+   * document and leaves the original ontology untouched, all operations performed here irreversibly
+   * modify the ontology.
+   *
+   * @param ontology the ontology to convert
+   * @param options option set dictating what should be cleaned in the ontology
+   * @return the resulting OBO document
+   */
+  private OBODoc makeCleanOBODocument(OWLOntology ontology, EnumSet<OBOWriteOption> options) {
+    if (options.contains(OBOWriteOption.DROP_GCI_AXIOMS)) {
+      Set<OWLClassAxiom> gciAxioms = ontology.getGeneralClassAxioms();
+      if (!gciAxioms.isEmpty()) {
+        ontology.getOWLOntologyManager().removeAxioms(ontology, gciAxioms);
+        logger.warn("Removing {} GCI axioms", gciAxioms.size());
+      }
+    }
+
+    Set<IRI> dropExtraProperties = new HashSet<>();
+    if (options.contains(OBOWriteOption.DROP_EXTRA_LABELS)) {
+      dropExtraProperties.add(OWLRDFVocabulary.RDFS_LABEL.getIRI());
+    }
+    if (options.contains(OBOWriteOption.DROP_EXTRA_DEFINITIONS)) {
+      dropExtraProperties.add(Obo2OWLConstants.Obo2OWLVocabulary.IRI_IAO_0000115.getIRI());
+    }
+    if (options.contains(OBOWriteOption.DROP_EXTRA_COMMENTS)) {
+      dropExtraProperties.add(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
+    }
+    if (!dropExtraProperties.isEmpty()) {
+      OntologyHelper.removeExtraAnnotations(ontology, dropExtraProperties);
+    }
+
+    if (options.contains(OBOWriteOption.MERGE_COMMENTS)) {
+      Set<IRI> mergeProperties = new HashSet<>();
+      mergeProperties.add(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
+      OntologyHelper.mergeExtraAnnotations(ontology, mergeProperties);
+    }
+
+    // Dropping the unstranslatable axioms is delegated to the OWLAPI's built-in feature
+    OWLAPIOwl2Obo oboConverter = new OWLAPIOwl2Obo(ontology.getOWLOntologyManager());
+    oboConverter.setDiscardUntranslatable(
+        options.contains(OBOWriteOption.DROP_UNSTRANSLATABLE_AXIOMS));
+    return oboConverter.convert(ontology);
   }
 }

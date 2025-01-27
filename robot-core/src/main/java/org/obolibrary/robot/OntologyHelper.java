@@ -1780,4 +1780,160 @@ public class OntologyHelper {
       manager.addAxiom(ontology, cleanedAxiom);
     }
   }
+
+  /**
+   * Removes supernumerary annotations on all entities in the given ontology.
+   *
+   * <p>This method iterates over all entities (excluding imported entities) of the given ontology;
+   * if an entity is found to have more than one annotation for each of the indicated properties,
+   * all annotations beyond the first one are removed.
+   *
+   * @param ontology OWLOntology from which to remove the supernumary annotations
+   * @param properties set of annotation property IRIs to remove
+   */
+  public static void removeExtraAnnotations(OWLOntology ontology, Set<IRI> properties) {
+    Set<OWLAnnotationAssertionAxiom> axiomsToRemove = new HashSet<>();
+    for (OWLEntity ent : ontology.getSignature(Imports.EXCLUDED)) {
+      IRI entity = ent.getIRI();
+      Map<IRI, Set<OWLAnnotationAssertionAxiom>> annotsByProperty =
+          getAnnotationAssertions(ontology, entity, properties);
+      for (IRI property : properties) {
+        Set<OWLAnnotationAssertionAxiom> axioms = annotsByProperty.get(property);
+        if (axioms != null && axioms.size() > 1) {
+          OWLAnnotationAssertionAxiom axiomToKeep = null;
+          // If only one annotation is language-agnostic, we keep this one
+          int axiomsWithoutLanguageTag = 0;
+          for (OWLAnnotationAssertionAxiom ax : axioms) {
+            OWLAnnotationValue value = ax.getValue();
+            // Non-literal annotations count as language-agnostic
+            if (!value.isLiteral() || !value.asLiteral().get().hasLang()) {
+              axiomsWithoutLanguageTag += 1;
+              axiomToKeep = ax;
+            }
+          }
+          if (axiomsWithoutLanguageTag != 1) {
+            // Can't use language tags to pick up the annotation to keep, so sort them and pick
+            // whichever comes out first
+            axiomToKeep = sortAxioms(axioms).get(0);
+          }
+          axioms.remove(axiomToKeep);
+          axiomsToRemove.addAll(axioms);
+          logger.warn(
+              "Removing {} extra <{}> annotation(s) on <{}>", axioms.size(), property, entity);
+        }
+      }
+    }
+    if (!axiomsToRemove.isEmpty()) {
+      ontology.getOWLOntologyManager().removeAxioms(ontology, axiomsToRemove);
+    }
+  }
+
+  /**
+   * Merges supernumerary annotations on all entities in the given ontology, using a single space
+   * character between each annotation value.
+   *
+   * @param ontology OWLOntology in which to merge supernumerary annotations
+   * @param properties set of annotation property IRIs to merge
+   */
+  public static void mergeExtraAnnotations(OWLOntology ontology, Set<IRI> properties) {
+    mergeExtraAnnotations(ontology, properties, " ");
+  }
+
+  /**
+   * Merges supernumerary annotations on all entities in the given ontology, using a custom
+   * separator between each annotation value.
+   *
+   * <p>This method iterates over all entities (excluding imported entities) of the given ontology;
+   * if an entity is found to have more than one annotation for each of the indicated properties,
+   * they are merged into a single annotation.
+   *
+   * @param ontology OWLOntology in which to merge supernumerary annotations
+   * @param properties set of annotation property IRIs to merge
+   * @param separator Separator string to insert between each annotation value (may be {@code null})
+   */
+  public static void mergeExtraAnnotations(
+      OWLOntology ontology, Set<IRI> properties, String separator) {
+    Set<OWLAnnotationAssertionAxiom> axiomsToRemove = new HashSet<>();
+    Set<OWLAnnotationAssertionAxiom> axiomsToAdd = new HashSet<>();
+    OWLDataFactory factory = ontology.getOWLOntologyManager().getOWLDataFactory();
+    for (OWLEntity ent : ontology.getSignature(Imports.EXCLUDED)) {
+      IRI entity = ent.getIRI();
+      Map<IRI, Set<OWLAnnotationAssertionAxiom>> annotsByProperty =
+          getAnnotationAssertions(ontology, entity, properties);
+      for (IRI property : properties) {
+        Set<OWLAnnotationAssertionAxiom> axioms = annotsByProperty.get(property);
+        if (axioms != null && axioms.size() > 1) {
+          // Check that all annotations have literal values only
+          int nonLiteralValues = 0;
+          for (OWLAnnotationAssertionAxiom ax : axioms) {
+            if (!ax.getValue().isLiteral()) {
+              nonLiteralValues += 1;
+            }
+          }
+          if (nonLiteralValues != 0) {
+            logger.warn("Cannot merge non-literal <{}> annotations on <{}>", property, entity);
+            continue;
+          }
+          // Build the merged annotation axiom
+          StringBuilder sb = new StringBuilder();
+          Set<OWLAnnotation> axiomAnnotations = new HashSet<>();
+          boolean first = true;
+          for (OWLAnnotationAssertionAxiom ax : sortAxioms(axioms)) {
+            if (!first && separator != null) {
+              sb.append(separator);
+            } else {
+              first = false;
+            }
+            sb.append(getValue(ax));
+            axiomAnnotations.addAll(ax.getAnnotations());
+          }
+          axiomsToAdd.add(
+              factory.getOWLAnnotationAssertionAxiom(
+                  factory.getOWLAnnotationProperty(property),
+                  entity,
+                  factory.getOWLLiteral(sb.toString()),
+                  axiomAnnotations));
+          axiomsToRemove.addAll(axioms);
+          logger.warn("Merging {} <{}> annotations on <{}>", axioms.size(), property, ent.getIRI());
+        }
+      }
+    }
+
+    if (!axiomsToRemove.isEmpty()) {
+      ontology.getOWLOntologyManager().removeAxioms(ontology, axiomsToRemove);
+      ontology.getOWLOntologyManager().addAxioms(ontology, axiomsToAdd);
+    }
+  }
+
+  /**
+   * Gets all annotation assertion axioms on a given entity that uses one of the indicated
+   * annotation properties.
+   *
+   * @param ontology OWLOntology from which to get the annotation axioms
+   * @param entity the subject for which to retrieve the annotations
+   * @param properties the annotation properties to look for
+   * @return a map associating property IRIs to annotation assertion axioms
+   */
+  private static Map<IRI, Set<OWLAnnotationAssertionAxiom>> getAnnotationAssertions(
+      OWLOntology ontology, IRI entity, Set<IRI> properties) {
+    Map<IRI, Set<OWLAnnotationAssertionAxiom>> annotsByProperty = new HashMap<>();
+    for (OWLAnnotationAssertionAxiom ax : ontology.getAnnotationAssertionAxioms(entity)) {
+      IRI property = ax.getProperty().getIRI();
+      annotsByProperty.computeIfAbsent(property, k -> new HashSet<>()).add(ax);
+    }
+    return annotsByProperty;
+  }
+
+  /**
+   * Turns a set of annotation axioms into an ordered list.
+   *
+   * @param axioms set of axioms to order
+   * @return an ordered list
+   */
+  private static List<OWLAnnotationAssertionAxiom> sortAxioms(
+      Set<OWLAnnotationAssertionAxiom> axioms) {
+    List<OWLAnnotationAssertionAxiom> asList = new ArrayList<>(axioms);
+    asList.sort((a, b) -> a.compareTo(b));
+    return asList;
+  }
 }

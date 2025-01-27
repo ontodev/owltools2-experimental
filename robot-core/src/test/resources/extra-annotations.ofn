@@ -1,0 +1,32 @@
+Prefix(:=<https://github.com/ontodev/robot/robot-core/src/test/resources/extra-annotations.owl#>)
+Prefix(obo:=<http://purl.obolibrary.org/obo/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(foaf:=<http://xmlns.com/foaf/0.1/>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<https://github.com/ontodev/robot/robot-core/src/test/resources/extra-annotations.owl>
+
+Declaration(Class(:test1))
+Declaration(Class(:test2))
+
+
+############################
+#   Classes
+############################
+
+# Class: :test1 (Test 1)
+
+AnnotationAssertion(rdfs:label :test1 "Test 1")
+AnnotationAssertion(rdfs:label :test1 "Test one")
+
+# Class: :test2 (Test 2)
+
+AnnotationAssertion(rdfs:label :test2 "Test deux"@fr)
+AnnotationAssertion(rdfs:label :test2 "Test two")
+
+
+)

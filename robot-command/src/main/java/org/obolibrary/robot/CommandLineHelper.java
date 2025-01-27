@@ -638,6 +638,10 @@ public class CommandLineHelper {
     // Determine if OBO structure should be enforced
     boolean checkOBO = CommandLineHelper.getBooleanValue(line, "check", true);
 
+    // And if we should produce "clean" OBO output
+    EnumSet<OBOWriteOption> cleanOBO =
+        OBOWriteOption.fromString(line.getOptionValue("clean-obo", "false"));
+
     // Determine if prefixes should be added to the header of output
     // Create a map of these to include in output (or an empty map)
     Map<String, String> addPrefixes = getAddPrefixes(line);
@@ -664,7 +668,8 @@ public class CommandLineHelper {
           String formatName = FilenameUtils.getExtension(path);
           thisDf = IOHelper.getFormat(formatName);
         }
-        ioHelper.saveOntology(ontology, thisDf, IRI.create(new File(path)), addPrefixes, checkOBO);
+        ioHelper.saveOntology(
+            ontology, thisDf, IRI.create(new File(path)), addPrefixes, checkOBO, cleanOBO);
       } catch (IllegalArgumentException e) {
         // Exception from getFormat -- invalid format
         throw new IllegalArgumentException(

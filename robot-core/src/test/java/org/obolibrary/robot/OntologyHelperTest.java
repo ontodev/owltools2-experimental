@@ -3,6 +3,7 @@ package org.obolibrary.robot;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -138,5 +139,50 @@ public class OntologyHelperTest extends CoreTest {
     OntologyHelper.collapseOntology(ontology, 3, precious, true);
     int after = ontology.getClassesInSignature().size();
     TestCase.assertEquals(8, after);
+  }
+
+  /**
+   * Test dropping of supernumerary annotations.
+   *
+   * @throws IOException on issue loading ontology
+   */
+  @Test
+  public void testDropExtraAnnotations() throws IOException {
+    OWLOntology ontology = loadOntology("/extra-annotations.ofn");
+    OWLDataFactory df = ontology.getOWLOntologyManager().getOWLDataFactory();
+    OWLAnnotationProperty prop = df.getRDFSLabel();
+    OntologyHelper.removeExtraAnnotations(ontology, Collections.singleton(prop.getIRI()));
+
+    // For :test1, the "Test 1" label should be preserved because it is lexicographically before
+    // "Test one"
+    IRI testIRI = IRI.create(base + "extra-annotations.owl#test1");
+    Set<String> actual = OntologyHelper.getAnnotationStrings(ontology, prop, testIRI);
+    Set<String> expected = Collections.singleton("Test 1");
+    assertEquals(expected, actual);
+
+    // For :test2, the "Test two" label should be preserved because it has no language tag, even
+    // though "Test deux" comes first lexicographically
+    testIRI = IRI.create(base + "extra-annotations.owl#test2");
+    actual = OntologyHelper.getAnnotationStrings(ontology, prop, testIRI);
+    expected = Collections.singleton("Test two");
+    assertEquals(expected, actual);
+  }
+
+  /**
+   * Test merging of supernumerary annotations.
+   *
+   * @throws IOException on issue loading ontology
+   */
+  @Test
+  public void testMergeExtraAnnotations() throws IOException {
+    OWLOntology ontology = loadOntology("/extra-annotations.ofn");
+    OWLDataFactory df = ontology.getOWLOntologyManager().getOWLDataFactory();
+    OWLAnnotationProperty prop = df.getRDFSLabel();
+    OntologyHelper.mergeExtraAnnotations(ontology, Collections.singleton(prop.getIRI()));
+
+    IRI testIRI = IRI.create(base + "extra-annotations.owl#test1");
+    Set<String> actual = OntologyHelper.getAnnotationStrings(ontology, prop, testIRI);
+    Set<String> expected = Collections.singleton("Test 1 Test one");
+    assertEquals(expected, actual);
   }
 }

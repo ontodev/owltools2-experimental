@@ -43,6 +43,7 @@ public class ConvertCommand implements Command {
     o.addOption("o", "output", true, "save ontology to a file");
     o.addOption("f", "format", true, "the format: obo, owl, ttl, owx, omn, ofn, json");
     o.addOption("c", "check", true, "if false, ignore OBO document structure checks");
+    o.addOption(null, "clean-obo", true, "options for clean OBO output (false|true|strict|simple)");
     options = o;
   }
 
