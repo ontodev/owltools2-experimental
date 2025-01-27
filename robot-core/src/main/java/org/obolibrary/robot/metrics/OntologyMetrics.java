@@ -8,7 +8,6 @@ import org.obolibrary.robot.IOHelper;
 import org.obolibrary.robot.providers.CURIEShortFormProvider;
 import org.semanticweb.owlapi.metrics.AbstractOWLMetric;
 import org.semanticweb.owlapi.metrics.AverageAssertedNamedSuperclassCount;
-import org.semanticweb.owlapi.metrics.DLExpressivity;
 import org.semanticweb.owlapi.metrics.GCICount;
 import org.semanticweb.owlapi.metrics.HiddenGCICount;
 import org.semanticweb.owlapi.metrics.MaximumNumberOfNamedSuperclasses;
@@ -48,6 +47,7 @@ import org.semanticweb.owlapi.profiles.OWLProfileViolation;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.Construct;
 import org.semanticweb.owlapi.util.DLExpressivityChecker;
+import org.semanticweb.owlapi.util.Languages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLObjectOneOfImpl;
@@ -991,10 +991,24 @@ public class OntologyMetrics {
   }
 
   private String getExpressivity(boolean included) {
-    DLExpressivity dl = new DLExpressivity(getOntology());
-    dl.setImportsClosureUsed(included);
-    dl.setOntology(getOntology());
-    return dl.getValue();
+    Set<OWLOntology> onts = new HashSet<>();
+    if (included) {
+      onts.addAll(getOntology().getImportsClosure());
+    } else {
+      onts.add(getOntology());
+    }
+    DLExpressivityChecker checker = new DLExpressivityChecker(onts);
+    Collection<Languages> languages = checker.expressibleInLanguages();
+
+    if (languages == null || languages.isEmpty()) {
+      LOGGER.warn("No language found for this ontology.. ");
+    } else {
+      Languages[] array = languages.toArray(new Languages[languages.size()]);
+      Arrays.sort(array);
+      return array[0].toString();
+    }
+
+    return "";
   }
 
   // this is highly unpleasant and I wish we had a NoSQL DB or even just a

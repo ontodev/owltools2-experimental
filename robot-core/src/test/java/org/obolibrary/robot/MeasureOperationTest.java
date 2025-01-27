@@ -47,7 +47,7 @@ public class MeasureOperationTest extends CoreTest {
     MeasureResult result =
         MeasureOperation.getMetrics(
             ontology, "extended", new CURIEShortFormProvider(new IOHelper().getPrefixes()));
-    assertEquals("RRESTRUCINTE+I(D)", result.getSimpleMetricValue(MetricsLabels.EXPRESSIVITY));
+    assertEquals("SID", result.getSimpleMetricValue(MetricsLabels.EXPRESSIVITY));
   }
 
   /**
