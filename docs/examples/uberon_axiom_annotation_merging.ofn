@@ -1,0 +1,100 @@
+Prefix(:=<http://purl.obolibrary.org/obo/uberon.owl#>)
+Prefix(obo:=<http://purl.obolibrary.org/obo/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(foaf:=<http://xmlns.com/foaf/0.1/>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(oboInOwl:=<http://www.geneontology.org/formats/oboInOwl#>)
+
+
+Ontology(<http://purl.obolibrary.org/obo/uberon.owl>
+
+Declaration(Class(obo:ROBOT_SuperClass))
+Declaration(Class(obo:UBERON_0000062))
+Declaration(Class(obo:UBERON_0000467))
+Declaration(ObjectProperty(obo:BFO_0000050))
+Declaration(ObjectProperty(obo:BFO_0000051))
+Declaration(AnnotationProperty(obo:IAO_0000115))
+Declaration(AnnotationProperty(obo:IAO_0000116))
+Declaration(AnnotationProperty(obo:IAO_0000232))
+Declaration(AnnotationProperty(obo:RO_0002174))
+Declaration(AnnotationProperty(obo:RO_0002175))
+Declaration(AnnotationProperty(obo:UBPROP_0000001))
+Declaration(AnnotationProperty(obo:UBPROP_0000003))
+Declaration(AnnotationProperty(obo:UBPROP_0000007))
+Declaration(AnnotationProperty(obo:UBPROP_0000008))
+Declaration(AnnotationProperty(obo:UBPROP_0000009))
+Declaration(AnnotationProperty(obo:UBPROP_0000012))
+Declaration(AnnotationProperty(oboInOwl:date_retrieved))
+Declaration(AnnotationProperty(oboInOwl:external_class))
+Declaration(AnnotationProperty(oboInOwl:external_ontology))
+Declaration(AnnotationProperty(oboInOwl:hasAlternativeId))
+Declaration(AnnotationProperty(oboInOwl:hasBroadSynonym))
+Declaration(AnnotationProperty(oboInOwl:hasDbXref))
+Declaration(AnnotationProperty(oboInOwl:hasExactSynonym))
+Declaration(AnnotationProperty(oboInOwl:hasNarrowSynonym))
+Declaration(AnnotationProperty(oboInOwl:hasOBONamespace))
+Declaration(AnnotationProperty(oboInOwl:hasRelatedSynonym))
+Declaration(AnnotationProperty(oboInOwl:hasSynonymType))
+Declaration(AnnotationProperty(oboInOwl:id))
+Declaration(AnnotationProperty(oboInOwl:inSubset))
+Declaration(AnnotationProperty(oboInOwl:notes))
+Declaration(AnnotationProperty(oboInOwl:ontology))
+Declaration(AnnotationProperty(oboInOwl:shorthand))
+Declaration(AnnotationProperty(oboInOwl:source))
+Declaration(AnnotationProperty(foaf:depicted_by))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: obo:BFO_0000050 (part_of)
+
+AnnotationAssertion(oboInOwl:hasDbXref obo:BFO_0000050 "BFO:0000050")
+AnnotationAssertion(oboInOwl:hasOBONamespace obo:BFO_0000050 "uberon")
+AnnotationAssertion(oboInOwl:id obo:BFO_0000050 "part_of")
+AnnotationAssertion(oboInOwl:shorthand obo:BFO_0000050 "part_of")
+AnnotationAssertion(rdfs:label obo:BFO_0000050 "part_of")
+InverseObjectProperties(obo:BFO_0000050 obo:BFO_0000051)
+TransitiveObjectProperty(obo:BFO_0000050)
+
+# Object Property: obo:BFO_0000051 (has_part)
+
+AnnotationAssertion(oboInOwl:hasDbXref obo:BFO_0000051 "BFO:0000051")
+AnnotationAssertion(oboInOwl:hasOBONamespace obo:BFO_0000051 "uberon")
+AnnotationAssertion(oboInOwl:id obo:BFO_0000051 "has_part")
+AnnotationAssertion(oboInOwl:shorthand obo:BFO_0000051 "has_part")
+AnnotationAssertion(rdfs:label obo:BFO_0000051 "has_part")
+TransitiveObjectProperty(obo:BFO_0000051)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: obo:UBERON_0000062 (organ)
+
+AnnotationAssertion(Annotation(oboInOwl:hasDbXref <http://en.wikipedia.org/wiki/page1>) obo:IAO_0000115 obo:UBERON_0000062 "Anatomical structure that performs a specific function or group of functions [WP].")
+AnnotationAssertion(Annotation(oboInOwl:hasDbXref <http://en.wikipedia.org/wiki/page2>) obo:IAO_0000115 obo:UBERON_0000062 "Anatomical structure that performs a specific function or group of functions [WP].")
+AnnotationAssertion(oboInOwl:hasDbXref obo:UBERON_0000062 <http://en.wikipedia.org/wiki/page1>)
+AnnotationAssertion(oboInOwl:hasDbXref obo:UBERON_0000062 <http://en.wikipedia.org/wiki/page2>)
+AnnotationAssertion(oboInOwl:hasDbXref obo:UBERON_0000062 <http://linkedlifedata.com/resource/umls/id/C0178784>)
+AnnotationAssertion(oboInOwl:hasDbXref obo:UBERON_0000062 <http://ncicb.nci.nih.gov/xml/owl/EVS/Organ>)
+AnnotationAssertion(oboInOwl:hasDbXref obo:UBERON_0000062 "WBbt:0003760")
+AnnotationAssertion(oboInOwl:hasRelatedSynonym obo:UBERON_0000062 "anatomical unit")
+AnnotationAssertion(Annotation(oboInOwl:hasDbXref <UBERON:123>) oboInOwl:hasRelatedSynonym obo:UBERON_0000062 "body organ")
+AnnotationAssertion(Annotation(oboInOwl:source <http://en.wikipedia.org/wiki/page1>) oboInOwl:hasRelatedSynonym obo:UBERON_0000062 "body organ")
+AnnotationAssertion(Annotation(oboInOwl:source <http://en.wikipedia.org/wiki/page2>) oboInOwl:hasRelatedSynonym obo:UBERON_0000062 "body organ")
+AnnotationAssertion(oboInOwl:hasRelatedSynonym obo:UBERON_0000062 "element")
+AnnotationAssertion(oboInOwl:id obo:UBERON_0000062 "UBERON:0000062")
+AnnotationAssertion(rdfs:label obo:UBERON_0000062 "organ")
+SubClassOf(obo:UBERON_0000062 obo:ROBOT_SuperClass)
+SubClassOf(Annotation(rdfs:comment "Comment A") obo:UBERON_0000062 obo:ROBOT_SuperClass)
+SubClassOf(Annotation(rdfs:comment "Comment B") obo:UBERON_0000062 obo:ROBOT_SuperClass)
+SubClassOf(obo:UBERON_0000062 ObjectSomeValuesFrom(obo:BFO_0000050 obo:UBERON_0000467))
+
+
+)

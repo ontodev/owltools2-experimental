@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip "non-robot" columns in templates for the purposes of axiom annotations [#1216]
 - Add missing filter for deprecated in lowercase_definition check [#1220]
 - Bug was fixed that caused logical axioms with axiom annotations not to be processed correctly when merging axiom annotations [#1223]
+- Correctly merge unannotated and annotated duplicated axioms [#1239]
 
 ## [1.9.7] - 2024-10-30
 

@@ -47,6 +47,6 @@ However, this can be enabled for a list of annotation properties passed either a
 
 Sometimes we end up with the same exact statement (synonym assertion, subclass of axiom) having different sets of axiom annotations (for example, different sources of provenance). If we want to merge these, so that all axiom annotations are combined on the same statement, we can use use:
 
-    robot repair --input uberon_axiom_annotation_merging.owl \
+    robot repair --input uberon_axiom_annotation_merging.ofn \
       --merge-axiom-annotations true \
-      --output results/uberon_axiom_annotation_merged.owl
+      --output results/uberon_axiom_annotation_merged.ofn

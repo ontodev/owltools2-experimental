@@ -121,40 +121,22 @@ public class RepairOperation {
    * @param ontology the OWLOntology to repair
    */
   public static void mergeAxiomAnnotations(OWLOntology ontology) {
-    Map<OWLAxiom, Set<OWLAnnotation>> mergedAxioms = new HashMap<>();
-    Set<OWLAxiom> axiomsToMerge = new HashSet<>();
+    Map<OWLAxiom, Set<OWLAnnotation>> annotsByAxiom = new HashMap<>();
+    Set<OWLAxiom> origAxioms = ontology.getAxioms();
 
-    // Find duplicated axioms and collect their annotations
-    // OWLAPI should already merge non-annotated duplicates
-    for (OWLAxiom axiom : ontology.getAxioms()) {
-      if (axiom.isAnnotated()) {
-        axiomsToMerge.add(axiom);
-        OWLAxiom strippedAxiom = axiom.getAxiomWithoutAnnotations();
-        Set<OWLAnnotation> annotations = axiom.getAnnotations();
-        if (mergedAxioms.containsKey(strippedAxiom)) {
-          logger.info("Merging annotations on axiom: {}", strippedAxiom.toString());
-          Set<OWLAnnotation> mergeAnnotations = new HashSet<>();
-          mergeAnnotations.addAll(mergedAxioms.get(strippedAxiom));
-          mergeAnnotations.addAll(annotations);
-          mergedAxioms.put(strippedAxiom, mergeAnnotations);
-        } else {
-          mergedAxioms.put(strippedAxiom, annotations);
-        }
-      }
+    for (OWLAxiom axiom : origAxioms) {
+      annotsByAxiom
+          .computeIfAbsent(axiom.getAxiomWithoutAnnotations(), k -> new HashSet<>())
+          .addAll(axiom.getAnnotations());
+    }
+
+    Set<OWLAxiom> newAxioms = new HashSet<>();
+    for (Map.Entry<OWLAxiom, Set<OWLAnnotation>> mergedAxiom : annotsByAxiom.entrySet()) {
+      newAxioms.add(mergedAxiom.getKey().getAnnotatedAxiom(mergedAxiom.getValue()));
     }
 
     OWLOntologyManager manager = ontology.getOWLOntologyManager();
-    OWLDataFactory dataFactory = manager.getOWLDataFactory();
-    // Remove the duplicated axioms
-    manager.removeAxioms(ontology, axiomsToMerge);
-
-    // Create the axioms with new set of annotations
-    Set<OWLAxiom> newAxioms = new HashSet<>();
-    for (Map.Entry<OWLAxiom, Set<OWLAnnotation>> mergedAxiom : mergedAxioms.entrySet()) {
-      OWLAxiom axiom = mergedAxiom.getKey();
-      OWLAxiom newAxiom = axiom.getAnnotatedAxiom(mergedAxiom.getValue());
-      newAxioms.add(newAxiom);
-    }
+    manager.removeAxioms(ontology, origAxioms);
     manager.addAxioms(ontology, newAxioms);
   }
 
