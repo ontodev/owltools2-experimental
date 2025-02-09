@@ -31,6 +31,19 @@ Including at least the following annotations is recommended:
   * Description (<a href="http://purl.org/dc/terms/description" target="_blank">`dcterms:description`</a>)
   * License (<a href="http://purl.org/dc/terms/license" target="_blank">`dcterms:license`</a>)
 
+If the `--interpolate` option is used, then some placeholders, of the form `%{NAME}`, can be used within the annotation values and will be automatically replaced by computed values. Currently supported placeholers are:
+
+  * `%{ontology_iri}`, replaced by the ontology's IRI;
+  * `%{version_iri}`, replaced by the ontology's version IRI.
+
+Example:
+
+    robot annotate --input fbcv-module.owl \
+      --interpolate true \
+      --link-annotation dc:source %{version_iri} \
+      --annotation rdfs:comment "Derived from %{ontology_iri}" \
+      --output results/fbcv-annotated.owl
+
 This command can also remove all ontology annotations from your file with `--remove-annotations`. You can combine this with options to add new annotations:
 
     robot annotate --input annotated.owl \

@@ -75,6 +75,8 @@ public class AnnotateCommand implements Command {
         "annotate-defined-by",
         true,
         "if true, annotate all entities in the ontology with the ontology IRI");
+    o.addOption(
+        "e", "interpolate", true, "if true, interpolate placeholders within annotation values");
 
     options = o;
 
@@ -187,6 +189,7 @@ public class AnnotateCommand implements Command {
 
     String property;
     String value;
+    boolean interpolate = CommandLineHelper.getBooleanValue(line, "interpolate", false);
 
     // Add annotations with PROP VALUE
     List<String> annotationItems = CommandLineHelper.getOptionValues(line, "annotation");
@@ -198,6 +201,9 @@ public class AnnotateCommand implements Command {
         value = annotationItems.remove(0);
       } catch (IndexOutOfBoundsException e) {
         throw new IllegalArgumentException(annotationFormatError, e);
+      }
+      if (interpolate) {
+        value = expandValue(value, ontology);
       }
       IRI iri = CommandLineHelper.maybeCreateIRI(ioHelper, property, "property");
       OntologyHelper.addOntologyAnnotation(ontology, iri, IOHelper.createLiteral(value));
@@ -213,6 +219,9 @@ public class AnnotateCommand implements Command {
         value = linkItems.remove(0);
       } catch (IndexOutOfBoundsException e) {
         throw new IllegalArgumentException(linkAnnotationFormatError, e);
+      }
+      if (interpolate) {
+        value = expandValue(value, ontology);
       }
       IRI propIRI = CommandLineHelper.maybeCreateIRI(ioHelper, property, "property");
       IRI valueIRI = CommandLineHelper.maybeCreateIRI(ioHelper, value, "value");
@@ -232,6 +241,9 @@ public class AnnotateCommand implements Command {
       } catch (IndexOutOfBoundsException e) {
         throw new IllegalArgumentException(langAnnotationFormatError, e);
       }
+      if (interpolate) {
+        value = expandValue(value, ontology);
+      }
       IRI iri = CommandLineHelper.maybeCreateIRI(ioHelper, property, "property");
       OntologyHelper.addOntologyAnnotation(
           ontology, iri, IOHelper.createTaggedLiteral(value, lang));
@@ -250,6 +262,9 @@ public class AnnotateCommand implements Command {
       } catch (IndexOutOfBoundsException e) {
         throw new IllegalArgumentException(typedAnnotationFormatError, e);
       }
+      if (interpolate) {
+        value = expandValue(value, ontology);
+      }
       IRI iri = CommandLineHelper.maybeCreateIRI(ioHelper, property, "property");
       OntologyHelper.addOntologyAnnotation(ontology, iri, ioHelper.createTypedLiteral(value, type));
     }
@@ -264,6 +279,9 @@ public class AnnotateCommand implements Command {
         value = axiomItems.remove(0);
       } catch (IndexOutOfBoundsException e) {
         throw new IllegalArgumentException(axiomAnnotationFormatError, e);
+      }
+      if (interpolate) {
+        value = expandValue(value, ontology);
       }
       IRI iri = CommandLineHelper.maybeCreateIRI(ioHelper, property, "property");
       OntologyHelper.addAxiomAnnotations(ontology, iri, IOHelper.createLiteral(value));
@@ -333,5 +351,32 @@ public class AnnotateCommand implements Command {
     CommandLineHelper.maybeSaveOutput(line, ontology);
 
     return state;
+  }
+
+  /**
+   * Expands placeholders within the given string with values derived from the ontology.
+   *
+   * <p>Placeholders are keywords enclosed within <code>%{...}</code>. Currently supported
+   * placeholders are:
+   *
+   * <ul>
+   *   <li><code>ontology_iri</code>: replaced by the ontology's IRI;
+   *   <li><code>version_iri</code>: replaced by the ontology's version IRI.
+   * </ul>
+   *
+   * @param value the string in which to replace placeholders
+   * @param ontology the ontology from which placeholder values should be derived
+   * @return the updated string
+   */
+  private String expandValue(String value, OWLOntology ontology) {
+    IRI ontologyIRI = ontology.getOntologyID().getOntologyIRI().orNull();
+    IRI versionIRI = ontology.getOntologyID().getVersionIRI().orNull();
+    if (ontologyIRI != null) {
+      value = value.replace("%{ontology_iri}", ontologyIRI.toString());
+    }
+    if (versionIRI != null) {
+      value = value.replace("%{version_iri}", versionIRI.toString());
+    }
+    return value;
   }
 }

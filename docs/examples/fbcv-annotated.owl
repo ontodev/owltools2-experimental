@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://purl.obolibrary.org/obo/dpo/simple#"
+     xml:base="http://purl.obolibrary.org/obo/dpo/simple"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#">
+    <owl:Ontology rdf:about="http://purl.obolibrary.org/obo/dpo/simple">
+        <owl:versionIRI rdf:resource="http://purl.obolibrary.org/obo/dpo/releases/2019-07-08/simple"/>
+        <terms:source rdf:resource="http://purl.obolibrary.org/obo/dpo/releases/2019-07-08/simple"/>
+        <rdfs:comment>Derived from http://purl.obolibrary.org/obo/dpo/simple</rdfs:comment>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/IAO_0000115 -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.obolibrary.org/obo/IAO_0000115"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/source -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/source"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#created_by -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#created_by"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#creation_date -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#creation_date"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#hasDbXref -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasDbXref"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#hasExactSynonym -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#hasOBONamespace -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasOBONamespace"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#id -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#id"/>
+    
+
+
+    <!-- http://www.geneontology.org/formats/oboInOwl#inSubset -->
+
+    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#inSubset"/>
+    
+
+
+    <!-- http://www.w3.org/2000/01/rdf-schema#comment -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#comment"/>
+    
+
+
+    <!-- http://www.w3.org/2000/01/rdf-schema#label -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#label"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/FBcv_0000002 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/FBcv_0000002">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FBcv_0000683"/>
+        <obo:IAO_0000115>Phenotype that is a defect in thermotaxis (GO:0043052). &apos;thermotaxis&apos; is defined as: &apos;$sub_GO:0043052&apos;</obo:IAO_0000115>
+        <oboInOwl:hasExactSynonym>thermotaxis behaviour defective</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasOBONamespace>phenotypic_class</oboInOwl:hasOBONamespace>
+        <oboInOwl:id>FBcv:0000002</oboInOwl:id>
+        <rdfs:label>thermotaxis behavior defective</rdfs:label>
+    </owl:Class>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/FBcv_0000002"/>
+        <owl:annotatedProperty rdf:resource="http://purl.obolibrary.org/obo/IAO_0000115"/>
+        <owl:annotatedTarget>Phenotype that is a defect in thermotaxis (GO:0043052). &apos;thermotaxis&apos; is defined as: &apos;$sub_GO:0043052&apos;</owl:annotatedTarget>
+        <oboInOwl:hasDbXref>FBC:DOS</oboInOwl:hasDbXref>
+    </owl:Axiom>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/FBcv_0000347 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/FBcv_0000347">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <oboInOwl:hasOBONamespace>phenotypic_class</oboInOwl:hasOBONamespace>
+        <oboInOwl:id>FBcv:0000347</oboInOwl:id>
+        <rdfs:label>phenotypic class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/FBcv_0000683 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/FBcv_0000683">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FBcv_0001347"/>
+        <obo:IAO_0000115>Phenotype that is a defect in response to temperature stimulus (GO:0009266). &apos;response to temperature stimulus&apos; is defined as: &apos;$sub_GO:0009266&apos;</obo:IAO_0000115>
+        <oboInOwl:created_by>djs93</oboInOwl:created_by>
+        <oboInOwl:creation_date>2010-02-23T12:51:02Z</oboInOwl:creation_date>
+        <oboInOwl:hasOBONamespace>phenotypic_class</oboInOwl:hasOBONamespace>
+        <oboInOwl:id>FBcv:0000683</oboInOwl:id>
+        <oboInOwl:inSubset>fbcvsubset_mgiribbons</oboInOwl:inSubset>
+        <rdfs:label>temperature response defective</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/FBcv_0001347 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/FBcv_0001347">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FBcv_0000347"/>
+        <obo:IAO_0000115>A defect in or loss of some anatomical structure or biological process compared to wild-type.</obo:IAO_0000115>
+        <oboInOwl:hasExactSynonym>phenotypic class</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasOBONamespace>phenotypic_class</oboInOwl:hasOBONamespace>
+        <oboInOwl:id>FBcv:0001347</oboInOwl:id>
+        <oboInOwl:inSubset>do_not_annotate</oboInOwl:inSubset>
+        <rdfs:comment>The subclasses of this term classify Drosophila phenotypes into different common categories. They have been chosen by FlyBase to reflect phenotype terms most often reported by Drosophila researchers in the published literature.</rdfs:comment>
+        <rdfs:label>phenotype</rdfs:label>
+    </owl:Class>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/FBcv_0001347"/>
+        <owl:annotatedProperty rdf:resource="http://purl.obolibrary.org/obo/IAO_0000115"/>
+        <owl:annotatedTarget>A defect in or loss of some anatomical structure or biological process compared to wild-type.</owl:annotatedTarget>
+        <oboInOwl:hasDbXref>FBC:DOS</oboInOwl:hasDbXref>
+    </owl:Axiom>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29) https://github.com/owlcs/owlapi -->
+
